@@ -6,6 +6,9 @@
   - [Intro](#intro)
     - [Install](#install)
     - [REPL](#repl)
+  - [Building Blocks](#building-blocks)
+    - [Simple Build Tool (sbt)](#simple-build-tool-sbt)
+    - [ScalaTest](#scalatest)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -208,3 +211,14 @@ src
 Right-click on `src/main/scala` and select "Create new Worksheet", name it [Testbed.sc](projects/filesearcher/src/main/scala/Testbed.sc).
 
 A worksheet provides REPL-like feedback within the IDE.
+
+### ScalaTest
+
+Will use unit tests to codify the app requirements. Tests will be written in [ScalaTest](http://www.scalatest.org/) and run with [JUnit Test Runner](http://junit.org/junit4/). To use these, add `libraryDependencies` to [build.sbt](projects/filesearcher/build.sbt).
+
+Use 4th argument to specify dependency is only needed for the "test" configuration.
+
+```scala
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
+libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
+```
