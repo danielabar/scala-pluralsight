@@ -132,3 +132,79 @@ With `if`, each branch returns a value. If/else in Scala is not standard control
 Even no-op methods like `println` have a return type.
 
 `:q` to exit REPL.
+
+## Building Blocks
+
+Over the course, will be building a File Searcher app, requirements:
+
+* Find all files that match a given filter at a given location
+  * Only matchfiles
+  * Use current location if given location is ommitted
+  * Search sub-folders from given location
+* Further filter files using a content filter
+* Return number of matches found in file
+* Allow filters to be regular expressions
+* Write results to a given file
+
+### Simple Build Tool (sbt)
+
+* Built-in defaults
+  * compile
+  * test
+  * run
+
+No configuration needed, given that default project structure is followed (based on maven):
+
+![SBT Project Structure](images/sbt-structure.png "SBT Project Structure")
+
+Can also run `sbt` interactively, just enter it into a terminal at project root. It will automatically compile any source it finds, even in project root (although not recommended to place source in root), [example](projects/hello/HelloSbt.scala).
+
+`console` task opens a REPL with project classpath already set.
+
+Can instantiate project class at REPL, for example:
+
+```scala
+new Main
+res0: Main = Main@27778cce
+```
+
+It works with no parens, recommendation is to only use no parens when action has no side effect.
+For example `sayHi` method does have side effect of writing to console, so it would be invoked with parens: `res0.sayHi()`.
+
+More on [Scala style](http://docs.scala-lang.org/style/).
+
+To exit sbt interactive mode, type `exit`.
+
+To setup a proper project, create a [build.sbt](projects/filesearcher/build.sbt) file in project root.
+
+Note that blank line acts as delimiter between settings.
+
+`name` and `version` are the minimal settings needed to package project into a jar.
+
+If don't scpecify `scalaVersion`, then it will use whatever version sbt was built against, better to specify.
+
+Create a `project` directory, which will contain [build.properties](projects/filesearcher/build.properties) and [plugins.sbt](projects/filesearcher/project/plugins.sbt)
+
+SBT uses [Apachy Ivy](http://ant.apache.org/ivy/ ) for dependency management. First value is group id, second is artifact id, and third is revision:
+
+```scala
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.4.0")
+```
+
+After all the setup is in place, open `build.sbt` in IntelliJ (assuming Language Scala and SBT plugins are installed), it will create this project structure:
+
+```
+src
+├── main
+│   ├── java
+│   ├── scala
+│   └── scala-2.11
+└── test
+    ├── java
+    ├── scala
+    └── scala-2.11
+```
+
+Right-click on `src/main/scala` and select "Create new Worksheet", name it [Testbed.sc](projects/filesearcher/src/main/scala/Testbed.sc).
+
+A worksheet provides REPL-like feedback within the IDE.
