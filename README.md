@@ -214,6 +214,8 @@ A worksheet provides REPL-like feedback within the IDE.
 
 ### ScalaTest
 
+[Example](projects/filesearcher/src/test/scala/fileSearcher/FilterCheckerTests.scala)
+
 Will use unit tests to codify the app requirements. Tests will be written in [ScalaTest](http://www.scalatest.org/) and run with [JUnit Test Runner](http://junit.org/junit4/). To use these, add `libraryDependencies` to [build.sbt](projects/filesearcher/build.sbt).
 
 Use 4th argument to specify dependency is only needed for the "test" configuration.
@@ -222,3 +224,76 @@ Use 4th argument to specify dependency is only needed for the "test" configurati
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
 libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 ```
+
+**Choose Testing Style**
+
+* xUnit -> FunSuite
+* BDD -> FlatSpec (default)
+* RSpec -> Flat Suite
+* Acceptance -> FeatureSpec
+* and [more](http://www.scalatest.org/user_guide/selecting_a_style)...  
+
+To use FlatSpec, start by extending the `FlatSpec` *trait*. A trait only contains definition signatures, similar to Java interface.
+Except a trait can also contain implementations, similar to Java abstract class.
+
+```scala
+import org.scalatest.FlatSpec
+
+class FilterCheckerTests extends FlatSpec {
+  ...
+}
+```
+
+`import` pulls in external libraries into scope. Can also use `_` to wildcard and pull in entire library, for example `import org.scalatest._` but better to be specific.
+
+Note that `==` checks for *object* equality, not *reference* equality:
+
+```scala
+assert(matchedFiles == List(matchingFile))
+```
+
+For reference quality, use `.eq` method.
+
+To run the tests, first enter sbt in interactive mode, then run the test task:
+
+```shell
+$ sbt
+> test
+```
+
+To run any task in watch mode (i.e. re-run on any file changes), prepend task with `~`, for example:
+
+```shell
+> ~test
+```
+
+To add a constructor parameter to class, follow class name with a parenthesis enclosed parameter list (notice less verbose than Java):
+
+```scala
+class FileObject(val name: String) {
+
+}
+```
+
+All parameters and regular classes are private by default. Adding `val` keyword makes the parameter public.
+
+For a private parameter, omit the `val` keyword, although it still is a value object.
+
+```scala
+class FilterChecker(filter: String) {
+
+}
+```
+
+To filter a for loop for only certain matches, use a *for comprehension*:
+
+```scala
+def findMatchedFiles(fileObjects: List[FileObject]) = {
+  for(fileObject <- fileObjects
+    if(matches(fileObject.name)))
+  // yield to caller, so list gets built up for caller with just the matches
+  yield fileObject
+}
+```
+
+Left at 9:30 of ScalaTest
