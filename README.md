@@ -378,3 +378,20 @@ If no cases match, then the default case is executed, which is annotated with `_
 If no default is provided, then any case that doesn't match results in a match error.
 
 ### Mapping the Data
+
+To transform lists of objects using a transformation function, emitting each transformed object into a new list.
+When the end of the input list is reached, the map operation projects out a newly created list of transformed objects.
+
+![Map Diagram](images/scala-map.png "Map Diagram")
+
+**Exception Handling**
+
+When catch has type, it won't act as catch all, but will only handle the declared type:
+
+```scala
+try
+  file.listFiles().toList map(file=>FileConverter convertToIOObject file)
+catch {
+  case _ : NullPointerException => List()
+}
+```
