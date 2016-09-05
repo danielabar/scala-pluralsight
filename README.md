@@ -11,6 +11,7 @@
     - [ScalaTest](#scalatest)
     - [Expressive Clean Code](#expressive-clean-code)
     - [Checking the File System](#checking-the-file-system)
+    - [Mapping the Data](#mapping-the-data)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -325,3 +326,55 @@ def matches(content: String) = content contains filter
 Infix notation should only be used for methods that have no side effects.
 
 ### Checking the File System
+
+Note that any code that is in a class and not part of a method definition, will run as part of construction, for example:
+
+```scala
+class Matcher(filter: String, rootLocation: String) {
+  val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
+}
+```
+
+**Case Classes**
+
+Classes with the keyword `case` in front of them, for example:
+
+```scala
+case class FileObject(file: File) extends IOObject
+```
+
+Constructor arguments for caes classes are always public, so `val` keyword not required.
+
+`case` class comes with its own *companion object* built in, therefore, don't need `new` keyword when instantiating one.
+
+Another benefit is that it builds its own `equals` implementation based on constructor arguments.
+
+Case classes also allow object decomposition and pattern matching (to be covered in more detail later in the course).
+
+**Pattern Matching**
+
+Take object to be matched against (`rootIOObject` in example below), followed by `match` keyword and list of scenarios, or cases to behandled.
+
+Cases are handled in the order in which they appear, falling to the next case until match is found.
+
+First case below specifies a variable named `file`, followed by colon, then the expected type `FileObject`.
+
+Cases can also contain *guard classes*, in the example below, used in `file` case to check if the captured files name matches the criteria.
+If the case matches and guard class also matches, then logic on right hand side of the arrow is executed, in this case, returning a `List` with a single file object:
+
+```scala
+val matchedFiles = rootIOObject match {
+  case file: FileObject if FilterChecker(filter) matches file.name => List(file)
+  case directory: DirectoryObject => ???
+  case _ => List()
+}
+```
+
+If everything on the left fails to match, then the next case is evaluated.
+
+Note that `???` throws a NotImplementedException.
+
+If no cases match, then the default case is executed, which is annotated with `_`.
+If no default is provided, then any case that doesn't match results in a match error.
+
+### Mapping the Data
