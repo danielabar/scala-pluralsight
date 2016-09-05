@@ -9,6 +9,7 @@
   - [Building Blocks](#building-blocks)
     - [Simple Build Tool (sbt)](#simple-build-tool-sbt)
     - [ScalaTest](#scalatest)
+    - [Expressive Clean Code](#expressive-clean-code)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -296,4 +297,4 @@ def findMatchedFiles(fileObjects: List[FileObject]) = {
 }
 ```
 
-Left at 9:30 of ScalaTest
+### Expressive Clean Code
