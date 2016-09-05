@@ -10,6 +10,7 @@
     - [Simple Build Tool (sbt)](#simple-build-tool-sbt)
     - [ScalaTest](#scalatest)
     - [Expressive Clean Code](#expressive-clean-code)
+    - [Checking the File System](#checking-the-file-system)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -298,3 +299,29 @@ def findMatchedFiles(fileObjects: List[FileObject]) = {
 ```
 
 ### Expressive Clean Code
+
+Can use *companion object* using `object` keyword to eliminate need for `new`, [example](projects/filesearcher/src/main/scala/fileSearcher/FilterChecker.scala).
+
+`object` is a way to create a singleton, or static class that can have methods called directly on it, without using `new` keyword.
+
+When an object is created with the same name and in the same file as another class, then its referred to as a *companion object* to the class.
+
+If the companion object defines an apply method, which returns an instance of the class, then a new instance of the class can be invoked without use of the `new` keyword (scala magic!).
+
+**Infix Notation**
+
+Any method that takes only one parameter can be called without the dot or parenthesis, for example, instead of:
+
+```scala
+def matches(content: String) = content.contains(filter)
+```
+
+Use:
+
+```scala
+def matches(content: String) = content contains filter
+```
+
+Infix notation should only be used for methods that have no side effects.
+
+### Checking the File System
