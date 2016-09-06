@@ -19,27 +19,15 @@ class FilterCheckerTests extends FlatSpec  {
   }
 
   // Integration test (runs against the file system)
-  "FilterChecker passed a file with content that matches the filter" should "return that the match succeeded" in {
-    assert(isContentMatched == true)
+  "FilterChecker passed a file with content that matches the filter 3 times" should "return a 3" in {
+    val isContentMatched = FilterChecker("pluralsight").findMatchedContentCount(new File("./testfiles/pluralsight.data"))
+    assert(isContentMatched == 3)
   }
 
   // Integration test (runs against the file system)
-  val isContentMatched = FilterChecker("pluralsight").matchesFileContent(new File("./testfiles/pluralsight.data"))
-  "FilterChecker passed a file with content that does not matches the filter" should "return that the match failed" in {
-    val isContentMatched = FilterChecker("pluralsight").matchesFileContent(new File("./testfiles/readme.txt"))
-    assert(isContentMatched == false)
-  }
-
-  "Matcher given a path that has one file that matches file filter and content filter" should "return a list with that file name" in {
-    val matcher = new Matcher("data", new File(".//testfiles//").getCanonicalPath(), true, Some("pluralsight"))
-    val matchedFiles = matcher.execute()
-    assert(matchedFiles == List("pluralsight.data"))
-  }
-
-  "Matcher given a path that has no file that matches file filter and content filter" should "return an empty list" in {
-    val matcher = new Matcher("txt", new File(".//testfiles//").getCanonicalPath(), true, Some("pluralsight"))
-    val matchedFiles = matcher.execute()
-    assert(matchedFiles == List())
+  "FilterChecker passed a file with content that does not matches the filter" should "return a 0" in {
+    val isContentMatched = FilterChecker("pluralsight").findMatchedContentCount(new File("./testfiles/readme.txt"))
+    assert(isContentMatched == 0)
   }
 
 }

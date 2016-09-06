@@ -5,17 +5,22 @@ import java.io.File
 import scala.util.control.NonFatal
 
 class FilterChecker(filter: String) {
+  val filterAsRegex = filter.r
 
-  def matches(content: String) = content contains filter
+  def matches(content: String) =
+    filterAsRegex findFirstMatchIn content match {
+      case Some(_) => true
+      case None => false
+    }
 
-  // this is one complex expression, therefore brackets can be ommitted
+  // this is one complex expression, therefore brackets can be omitted
   def findMatchedFiles(ioObjects: List[IOObject]) =
     for(ioObject <- ioObjects
       if(ioObject.isInstanceOf[FileObject])
       if(matches(ioObject.name)))
     yield ioObject
 
-  def matchesFileContent(file: File) = {
+  def findMatchedContentCount(file: File) = {
     import scala.io.Source
     // nested try/catch is required so Source can be closed
     try {

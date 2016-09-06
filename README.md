@@ -421,16 +421,16 @@ class Matcher(filter: String, rootLocation: String = new File(".").getCanonicalP
 
 For filesearcher app, need ability to search sub-folders from a given location.
 
-Simple example of recursion to calculate factorial. This requires the entire stack to complete before it can begin evaluating, which can cause stack overflow for a deeply nested algorithm. 
+Simple example of recursion to calculate factorial. This requires the entire stack to complete before it can begin evaluating, which can cause stack overflow for a deeply nested algorithm.
 
 ```scala
-def fact(n: Int): Int = 
+def fact(n: Int): Int =
   if (n == 0) 1 else n * fact(n-1)
 ```
 
 **Tail Recursion**
 
-To solve the problem of large stacks. Method is considered *tail recursive* if it only calls itself as the last action. 
+To solve the problem of large stacks. Method is considered *tail recursive* if it only calls itself as the last action.
 This allows compiler to optimize the code into a loop, continuously re-using the same stack.
 
 Factorial rewrite:
@@ -438,7 +438,7 @@ Factorial rewrite:
 ```scala
 def fact(n: Int) = factHelper(n, 1)
 
-def factHelper(n: Int, acc: Int): Int = 
+def factHelper(n: Int, acc: Int): Int =
   if (n == 0) acc
   else factHelper(n-1, acc * n)
 ```
@@ -448,7 +448,7 @@ Note recurisve call is the *only* thing in the `else` block.
 
 Each recursive call can be immediately popped off the stack because there's no reason to hang on to it.
 
-Note that return type inference is not allowed with recursion. 
+Note that return type inference is not allowed with recursion.
 
 Can annotate method that is guaranteed to be tail recursive. If compiler cannot perform tail-call optimization, then it will fail to compile.
 
@@ -458,7 +458,7 @@ import scala.annotation.tailrec
 class Matcher() {
   @tailrec
   def recursiveMatch() = {
-    
+
   }
 }
 ```
@@ -494,7 +494,7 @@ Implementing filesearcher requirements, to further filter results by content wit
 
 ### Reading Data
 
-Will be using Scala's `scala.io` library, which is fine for basic use cases, but has limited functionality and bugs in some edge cases. Generally recommended to use `java.nio`. 
+Will be using Scala's `scala.io` library, which is fine for basic use cases, but has limited functionality and bugs in some edge cases. Generally recommended to use `java.nio`.
 
 Import can be used within a method. If its not at top level, gets scoped like any other variable.
 
@@ -556,3 +556,22 @@ Another benefit of `Option`, if don't check for `case None`, get a compiler warn
 ### Regular Expressions
 
 Implementing "Further filter files using a content filter", "Return number of matches", and "Allow filters to be regex" in Filesearcher app.
+
+To use a string as a regex, simply invoke its `r` method:
+
+```scala
+val myString = "foo"
+val myStringAsRegex = myString.r
+```
+
+`r` method will validate that regex is valid, and throw a PatternSyntaxException if it is not.
+
+To use the regex, call its `findFirstMatchIn` method, which returns a `match` that can be pattern matched against:
+
+```scala
+val content = "some content to be searched"
+myStringAsRegex findFirstMatchIn content match {
+  case Some(_) => true
+  case None => false
+}
+```

@@ -45,7 +45,7 @@ class Matcher(filter: String,
         // "filter" method loops through each file object and uses "matchesFileContent" method to check the file
         // "filter" will look through ALL objects, whether match is found or not (unllike "exists" that stops at first true)
         // "filter" returns a list containing objects that match the predicate (unlike "exists" that returns a boolean)
-        matchedFiles filter(ioObject => FilterChecker(dataFilter).matchesFileContent(ioObject.file))
+        matchedFiles filter(ioObject => FilterChecker(dataFilter).findMatchedContentCount(ioObject.file))
       case None => matchedFiles
     }
 
