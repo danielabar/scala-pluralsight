@@ -2,13 +2,19 @@ package fileSearcher
 
 import java.io.File
 
+import scala.annotation.tailrec
+
 // rootLocation is optional, could be a file or directory
 // rootLocation is made public so it can be verified in tests (does Scala have protected?)
-class Matcher(filter: String, val rootLocation: String = new File(".").getCanonicalPath(), checkSubFolders : Boolean = false) {
+class Matcher(filter: String,
+              val rootLocation: String = new File(".").getCanonicalPath(),
+              checkSubFolders : Boolean = false,
+              contentFilter: Option[String] = None) {
   val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
   // tail recursive method, files is list to be searched, currentList is accumulator fo results
-  def recursiveMatch(files: List[IOObject], currentList: List[FileObject]): List[FileObject] =
+  @tailrec
+  final def recursiveMatch(files: List[IOObject], currentList: List[FileObject]): List[FileObject] =
     files match {
       // empty list is terminator
       case List() => currentList
@@ -33,7 +39,17 @@ class Matcher(filter: String, val rootLocation: String = new File(".").getCanoni
       case _ => List()
     }
 
+    // Notice not using variable colon type syntax used in ohter pattern matchers
+    val contentFilteredFiles = contentFilter match {
+      case Some(dataFilter) =>
+        // "filter" method loops through each file object and uses "matchesFileContent" method to check the file
+        // "filter" will look through ALL objects, whether match is found or not (unllike "exists" that stops at first true)
+        // "filter" returns a list containing objects that match the predicate (unlike "exists" that returns a boolean)
+        matchedFiles filter(ioObject => FilterChecker(dataFilter).matchesFileContent(ioObject.file))
+      case None => matchedFiles
+    }
+
     // project only the name value of each object using List's "map" operation
-    matchedFiles map(ioObject => ioObject.name)
+    contentFilteredFiles map(ioObject => ioObject.name)
   }
 }

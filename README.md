@@ -15,6 +15,7 @@
     - [Recursion](#recursion)
   - [Diving for Data](#diving-for-data)
     - [Reading Data](#reading-data)
+    - [Regular Expressions](#regular-expressions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -516,3 +517,42 @@ def someMethod() = {
   }
 }
 ```
+
+**Option**
+
+`Option` is a wrapper around another type so it can be extracted as necessary.
+Can be a `Some` containing the expected data, or a `None` meaning no data was submitted.
+
+```scala
+class Matcher(contentFilter: Option[String] = None) {
+  ...  
+}
+
+// usage
+val matcher = new Matcher(Some("pluralsight"))
+```
+
+**Optional VAlues**
+
+Solves two problems: Magic values, and null pointer exceptions.
+
+Magic values often used to represent empty or default state, but they're not explicit so can result in unexpected behaviour, eg: could also be a legitimate user input.
+
+To make use of `Option`, use `match...case` pattern matching, but syntax is different than regular pattern matching. Does not using "variable : type" syntax.
+Instead, specify the type and extract its constructor arguments into variables directly.
+
+This works because `Some` and `None` are `case` classes, which can be pattern matched on directly, in a form which looks just like constructor, except constructor arguments are extracted *out* of the object and *into* the provided variables.
+
+```scala
+contentFilter match {
+  // capture the value of the Some in a variable
+  case Some(dataFilter) => ???
+  case None => matchedFiles
+}
+```
+
+Another benefit of `Option`, if don't check for `case None`, get a compiler warning "match may not be exhaustive. It would fail on input: None".
+
+### Regular Expressions
+
+Implementing "Furhter filter files using a content filter" in Filesearcher app.
