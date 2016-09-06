@@ -13,6 +13,8 @@
     - [Checking the File System](#checking-the-file-system)
     - [Mapping the Data](#mapping-the-data)
     - [Recursion](#recursion)
+  - [Diving for Data](#diving-for-data)
+    - [Reading Data](#reading-data)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -484,3 +486,33 @@ res3: List[Int] = List(3, 4, 1, 2)
 ```
 
 Scala allows methods to be nested in other methods, as deep as you want.
+
+## Diving for Data
+
+Implementing filesearcher requirements, to further filter results by content within a file.
+
+### Reading Data
+
+Will be using Scala's `scala.io` library, which is fine for basic use cases, but has limited functionality and bugs in some edge cases. Generally recommended to use `java.nio`. 
+
+Import can be used within a method. If its not at top level, gets scoped like any other variable.
+
+```scala
+def matchesFileContent(file: File) = {
+  import scala.io.Source
+}
+```
+
+Should never catch *all* exceptions, but to catch all non fatal:
+
+```scala
+import scala.util.control.NonFatal
+
+def someMethod() = {
+  try {
+    // do something that might throw...
+  } catch {
+    case NonFatal(_) => ???
+  }
+}
+```
