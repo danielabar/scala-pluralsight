@@ -2,8 +2,9 @@ package fileSearcher
 
 import java.io.File
 
-// rootLocation could be a file or director
-class Matcher(filter: String, rootLocation: String) {
+// rootLocation is optional, could be a file or directory
+// rootLocation is made public so it can be verified in tests (does Scala have protected?)
+class Matcher(filter: String, val rootLocation: String = new File(".").getCanonicalPath()) {
   val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
   def execute() = {

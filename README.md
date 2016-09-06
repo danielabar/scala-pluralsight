@@ -395,3 +395,20 @@ catch {
   case _ : NullPointerException => List()
 }
 ```
+
+**Default Arguments**
+
+Make a method argument optional by providing a default. To do this, follow the argument type with `=`, and the logic that creates the default.
+For example, to create a file at root location if one is not provided.
+
+```scala
+// without default
+class Matcher(filter: String, rootLocation: String) {
+  ...
+}
+
+// with default
+class Matcher(filter: String, rootLocation: String = new File(".").getCanonicalPath()) {
+  ...
+}
+```
