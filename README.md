@@ -555,4 +555,4 @@ Another benefit of `Option`, if don't check for `case None`, get a compiler warn
 
 ### Regular Expressions
 
-Implementing "Furhter filter files using a content filter" in Filesearcher app.
+Implementing "Further filter files using a content filter", "Return number of matches", and "Allow filters to be regex" in Filesearcher app.

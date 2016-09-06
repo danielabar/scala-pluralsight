@@ -12,7 +12,7 @@ class Matcher(filter: String,
               contentFilter: Option[String] = None) {
   val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
-  // tail recursive method, files is list to be searched, currentList is accumulator fo results
+  // tail recursive method, files is list to be searched, currentList is accumulator for results
   @tailrec
   final def recursiveMatch(files: List[IOObject], currentList: List[FileObject]): List[FileObject] =
     files match {
