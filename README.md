@@ -12,6 +12,7 @@
     - [Expressive Clean Code](#expressive-clean-code)
     - [Checking the File System](#checking-the-file-system)
     - [Mapping the Data](#mapping-the-data)
+    - [Recursion](#recursion)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -412,3 +413,74 @@ class Matcher(filter: String, rootLocation: String = new File(".").getCanonicalP
   ...
 }
 ```
+
+### Recursion
+
+For filesearcher app, need ability to search sub-folders from a given location.
+
+Simple example of recursion to calculate factorial. This requires the entire stack to complete before it can begin evaluating, which can cause stack overflow for a deeply nested algorithm. 
+
+```scala
+def fact(n: Int): Int = 
+  if (n == 0) 1 else n * fact(n-1)
+```
+
+**Tail Recursion**
+
+To solve the problem of large stacks. Method is considered *tail recursive* if it only calls itself as the last action. 
+This allows compiler to optimize the code into a loop, continuously re-using the same stack.
+
+Factorial rewrite:
+
+```scala
+def fact(n: Int) = factHelper(n, 1)
+
+def factHelper(n: Int, acc: Int): Int = 
+  if (n == 0) acc
+  else factHelper(n-1, acc * n)
+```
+
+Now the factorial method calls a tail recursive helper method `factHelper`, which uses an *accumulator* to keep track of the current value instead of relying on the stack.
+Note recurisve call is the *only* thing in the `else` block.
+
+Each recursive call can be immediately popped off the stack because there's no reason to hang on to it.
+
+Note that return type inference is not allowed with recursion. 
+
+Can annotate method that is guaranteed to be tail recursive. If compiler cannot perform tail-call optimization, then it will fail to compile.
+
+```scala
+import scala.annotation.tailrec
+
+class Matcher() {
+  @tailrec
+  def recursiveMatch() = {
+    
+  }
+}
+```
+
+**List cons operator**
+
+To append an item to list, use `::` operator:
+
+```scala
+scala> val mylist = List(1, 2, 3, 4)
+scala> val foo = 5
+scala> foo :: mylist
+res0: List[Int] = List(5, 1, 2, 3, 4)
+```
+
+To append two lists, use `:::` operator:
+
+```scala
+scala> val firstList = List(1, 2)
+scala> val secondList = List(3, 4)
+scala> firstList ::: secondList
+res1: List[Int] = List(1, 2, 3, 4)
+
+scala> secondList ::: firstList
+res3: List[Int] = List(3, 4, 1, 2)
+```
+
+Scala allows methods to be nested in other methods, as deep as you want.
